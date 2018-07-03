@@ -15,9 +15,8 @@ Next line contains _n_ space separated integer where _i_ integer denotes node[i]
 
 **Sample Input:**
 
-6
-
-1 2 5 3 6 4
+    6
+    1 2 5 3 6 4
 
 Which ara arranged in the tree as:
 
@@ -33,7 +32,7 @@ Which ara arranged in the tree as:
 
 **Sample Output:**
 
-1 2 5 3 6 4
+    1 2 5 3 6 4
 
 
 #### Binary Search Tree Reference 
