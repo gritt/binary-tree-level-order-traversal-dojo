@@ -7,7 +7,6 @@ struct node {
     int data;
     struct node *left;
     struct node *right;
-
 };
 
 struct node *insert(struct node *root, int data) {
@@ -38,107 +37,110 @@ struct node *insert(struct node *root, int data) {
     }
 }
 
-/*
- * Solution
- *
- * FIFO - first in, first out
- */
-
 /**
- * a linked list queueNode to store a queue item, also contains a pointer to the tree node
+ * A 'linked list' style QueueNode, which points to the next QueueNode
  */
-struct queueNode {
-    int key;
-    struct queueNode *next;
+struct QueueNode {
     struct node *node;
+    struct QueueNode *next;
 };
 
 /**
- * a queue must keep track of the front and the rear indexes (nodes)
+ * A classic Queue, that keeps track of the front and the rear nodes
  */
-struct queue {
-    struct queueNode *front, *rear;
+struct Queue {
+    struct QueueNode *front, *rear;
 };
 
 /**
- * creates a new 'linked list type' queueNode
+ * Creates a new QueueNode
  *
  * @param key
- * @param node
- * @return struct queueNode
+ * @return
  */
-struct queueNode *newQueueNode(int key, struct node *node) {
+struct QueueNode *newNode(struct node *node) {
 
-    struct queueNode *qNode = (struct queueNode *) malloc(sizeof(struct queueNode));
+    struct QueueNode *tmpNode = (struct QueueNode *) malloc(sizeof(struct QueueNode));
 
-    qNode->key = key;
-    qNode->node = node;
-    qNode->next = NULL;
+    tmpNode->node = node;
+    tmpNode->next = NULL;
 
-    return qNode;
+    return tmpNode;
 }
 
 /**
- * creates a new queue
+ * Creates a new Queue
  *
- * @return struct queue
+ * @return
  */
-struct queue *newQueue() {
+struct Queue *newQueue() {
 
-    struct queue *q = (struct queue *) malloc(sizeof(struct queue));
+    struct Queue *q = (struct Queue *) malloc(sizeof(struct Queue));
 
-    q->front = NULL;
-    q->rear = NULL;
+    q->front = q->rear = NULL;
 
     return q;
 }
 
 /**
- * add a node to the given queue
+ * Adds a new QueueNode to the end of the Queue
  *
  * @param q
  * @param key
- * @param node
  */
-void push(struct queue *q, int key, struct node *node) {
+void enQueue(struct Queue *q, struct node *node) {
 
-    // create a new linked list queueNode
-    struct queueNode *tmpNode = newQueueNode(key, node);
+    struct QueueNode *tmpNode = newNode(node);
 
-    // if queue is empty, the new node is both front and rear
+    // if queue is empty, then the new node is both front and rear
     if (q->rear == NULL) {
-        q->front = q->rear = NULL;
+        q->front = q->rear = tmpNode;
         return;
     }
 
-    // add new node at the end of the queue
+    // add the new node at the end of queue and change rear
     q->rear->next = tmpNode;
     q->rear = tmpNode;
 }
 
 /**
- * remove a node from the given queue
+ * Removes a QueueNode of the front of the Queue, moves front->next to actual "front"
  *
  * @param q
- * @return struct queueNode
+ * @return
  */
-struct queueNode *pop(struct queue *q) {
+struct QueueNode *deQueue(struct Queue *q) {
 
-    // if the queue is empty, return NULL
+    // if queue is empty, return NULL.
     if (q->front == NULL) {
         return NULL;
     }
 
-    // store previous front and move one node ahead
-    struct queueNode *tmpNode = q->front;
+    // store previous front and move front one node ahead
+    struct QueueNode *tmpNode = q->front;
     q->front = q->front->next;
 
-    // if front becomes NULL, then change rear also to NULL (empty)
-    if (q->front == NULL) {
+    // if front becomes NULL, then change rear also as NULL
+    if (q->front == NULL)
         q->rear = NULL;
-    }
 
     return tmpNode;
+}
+
+/**
+ * Checks whether the Queue is empty
+ *
+ * @param q
+ * @return
+ */
+int isEmpty(struct Queue *q) {
+
+    // queue is empty if there's no front or rear nodes
+    if (q->front == NULL && q->rear == NULL) {
+        return 1;
+    }
+
+    return 0;
 }
 
 
@@ -148,14 +150,28 @@ void levelOrder(struct node *root) {
         return;
     }
 
+    struct Queue *treeQueue = newQueue();
 
+    enQueue(treeQueue, root);
 
-    /*
-     *  visit the nodes level by level from left to right.
-     */
+    while (isEmpty(treeQueue) == 0) {
 
-    printf("%d", root->data);
+        struct QueueNode *queueNode = treeQueue->front;
 
+        printf("%d", queueNode->node->data);
+
+        deQueue(treeQueue);
+
+        // enqueue left child
+        if (queueNode->node->left != NULL) {
+            enQueue(treeQueue, queueNode->node->left);
+        }
+
+        // enqueue right child
+        if (queueNode->node->right != NULL) {
+            enQueue(treeQueue, queueNode->node->right);
+        }
+    }
 }
 
 int main() {
