@@ -150,7 +150,44 @@ void levelOrder(struct node *root) {
         return;
     }
 
+    /*
+     * Solution:
+     *
+     * First node is visited, than removed, child nodes are put in a FIFO queue,
+     * The loop continues till the queue is empty
+     *
+     *
+     * Using Queue Linked List algorithm from
+     * https://github.com/gritt/queue-linked-list
+     */
     struct Queue *treeQueue = newQueue();
+
+    /*
+     * root node is added to the queue (1)
+     *
+     * while the queue is not consumed {
+     *
+     *      we visit the first node of the queue (1)
+     *
+     *      we then remove the first node of the queue (empty)
+     *
+     *      and we add it's child nodes to the queue, left(2) -> right(3), as is expected to show in level order traversal)
+     *
+     *      following the loop..
+     *
+     *      we visit the first node of the queue - left(2)
+     *
+     *      we then remove the first node of the queue (left the right node at front (3))
+     *
+     *      add left and right child..
+     *
+     *      visit the first node - right(3)
+     *
+     *      remove it..
+     *
+     *      add left and right
+     * }
+     */
 
     enQueue(treeQueue, root);
 
