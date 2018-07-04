@@ -54,24 +54,6 @@ struct queueNode {
 };
 
 /**
- * creates a new 'linked list type' queueNode
- *
- * @param int key
- * @param struct node *node
- * @return struct queueNode
- */
-struct queueNode *newQueueNode(int key, struct node *node) {
-
-    struct queueNode *queueNode = (struct queueNode *) malloc(sizeof(struct queueNode));
-
-    queueNode->key = key;
-    queueNode->node = node;
-    queueNode->next = NULL;
-
-    return queueNode;
-}
-
-/**
  * a queue must keep track of the front and the rear indexes (nodes)
  */
 struct queue {
@@ -79,25 +61,44 @@ struct queue {
 };
 
 /**
+ * creates a new 'linked list type' queueNode
  *
- * @return struct queue
+ * @param key
+ * @param node
+ * @return struct queueNode
  */
-struct queue *createQueue() {
+struct queueNode *newQueueNode(int key, struct node *node) {
 
-    struct queue *queue = (struct queue *) malloc(sizeof(struct queue));
+    struct queueNode *qNode = (struct queueNode *) malloc(sizeof(struct queueNode));
 
-    queue->front = NULL;
-    queue->rear = NULL;
+    qNode->key = key;
+    qNode->node = node;
+    qNode->next = NULL;
 
-    return queue;
+    return qNode;
 }
 
 /**
- * enqueue a node in the given queue
+ * creates a new queue
  *
- * @param struct queue *queue
- * @param int key
- * @param struct node *node
+ * @return struct queue
+ */
+struct queue *newQueue() {
+
+    struct queue *q = (struct queue *) malloc(sizeof(struct queue));
+
+    q->front = NULL;
+    q->rear = NULL;
+
+    return q;
+}
+
+/**
+ * add a node to the given queue
+ *
+ * @param q
+ * @param key
+ * @param node
  */
 void push(struct queue *q, int key, struct node *node) {
 
@@ -118,7 +119,7 @@ void push(struct queue *q, int key, struct node *node) {
 /**
  * remove a node from the given queue
  *
- * @param struct queue *queue
+ * @param q
  * @return struct queueNode
  */
 struct queueNode *pop(struct queue *q) {
@@ -140,13 +141,14 @@ struct queueNode *pop(struct queue *q) {
     return tmpNode;
 }
 
+
 void levelOrder(struct node *root) {
 
     if (root == NULL) {
         return;
     }
 
-    
+
 
     /*
      *  visit the nodes level by level from left to right.
