@@ -195,7 +195,7 @@ void levelOrder(struct node *root) {
 
         struct QueueNode *queueNode = treeQueue->front;
 
-        printf("%d", queueNode->node->data);
+        printf("%d ", queueNode->node->data);
 
         deQueue(treeQueue);
 
